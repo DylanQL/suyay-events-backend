@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, ForeignKey, Decimal, Date
+from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, ForeignKey, Date, Numeric
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
@@ -143,7 +143,7 @@ class TicketType(Base):
     id = Column(Integer, primary_key=True, index=True)
     event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
     name = Column(String(100), nullable=False)
-    price = Column(Decimal(10, 2), nullable=False)
+    price = Column(Numeric(10, 2), nullable=False)
     capacity = Column(Integer, nullable=False)
     
     event = relationship("Event", back_populates="ticket_types")
@@ -155,7 +155,7 @@ class Purchase(Base):
     id = Column(Integer, primary_key=True, index=True)
     event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    total_amount = Column(Decimal(10, 2), nullable=False)
+    total_amount = Column(Numeric(10, 2), nullable=False)
     purchase_date = Column(DateTime, server_default=func.now(), nullable=False)
     
     event = relationship("Event", back_populates="purchases")
@@ -170,8 +170,8 @@ class PurchaseDetail(Base):
     purchase_id = Column(Integer, ForeignKey("purchases.id"), nullable=False)
     ticket_type_id = Column(Integer, ForeignKey("ticket_types.id"), nullable=False)
     quantity = Column(Integer, nullable=False)
-    unit_price = Column(Decimal(10, 2), nullable=False)
-    subtotal = Column(Decimal(10, 2), nullable=False)
+    unit_price = Column(Numeric(10, 2), nullable=False)
+    subtotal = Column(Numeric(10, 2), nullable=False)
     
     purchase = relationship("Purchase", back_populates="details")
     ticket_type = relationship("TicketType", back_populates="purchase_details")
@@ -251,7 +251,7 @@ class Claim(Base):
     mobile_phone = Column(String(20), nullable=False)
     email = Column(String(255), nullable=False)
     is_minor = Column(Boolean, default=False, nullable=False)
-    claim_amount = Column(Decimal(10, 2), nullable=True)
+    claim_amount = Column(Numeric(10, 2), nullable=True)
     service_type = Column(String(100), nullable=False)
     product_service_description = Column(Text, nullable=False)
     claim_type = Column(String(100), nullable=False)
